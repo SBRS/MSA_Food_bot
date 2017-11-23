@@ -5,6 +5,39 @@ exports.displayFavouriteFood = function getFavouriteFood(session, username){
     rest.getFavouriteFood(url, session, username, handleFavouriteFoodResponse)
 };
 
+exports.sendFavouriteFood = function postFavouriteFood(session, username, favouriteFood){
+    var url = 'https://foodbotmsa77.azurewebsites.net/tables/foodbot';
+    rest.postFavouriteFood(url, username, favouriteFood);
+};
+
+exports.deleteFavouriteFood = function deleteFavouriteFood(session,username,favouriteFood){
+    var url  = 'https://foodbotmsa77.azurewebsites.net/tables/foodbot';
+
+
+    rest.getFavouriteFood(url,session, username,function(message,session,username){
+     var   allFoods = JSON.parse(message);
+
+        for(var i in allFoods) {
+
+            if (allFoods[i].favouriteFood === favouriteFood && allFoods[i].username === username) {
+
+                console.log(allFoods[i]);
+
+                rest.deleteFavouriteFood(url,session,username,favouriteFood, allFoods[i].id ,handleDeletedFoodResponse)
+
+            }
+        }
+
+
+    });
+
+
+};
+
+function handleDeletedFoodResponse(body,session,username, favouriteFood){
+    console.log('Done');
+}
+
 function handleFavouriteFoodResponse(message, session, username) {
     var favouriteFoodResponse = JSON.parse(message);
     var allFoods = [];
