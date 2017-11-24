@@ -18,7 +18,7 @@ exports.retreiveMessage = function (session){
 
 function validResponse(body){
     if (body && body.Predictions && body.Predictions[0].Tag){
-        return body.Predictions[0].Tag;
+        return "This is " + body.Predictions[0].Tag;
     } else{
         console.log('Oops, please try again!');
     }
