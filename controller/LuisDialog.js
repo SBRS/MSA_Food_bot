@@ -3,7 +3,7 @@ var food = require("./FavouriteFoods");
 var restaurant = require('./RestaurantCard');
 var nutrition = require('./NutritionCard');
 var customVision = require('./CognitiveDialog');
-
+var qna = require('./QnAMaker');
 
 exports.startDialog = function (bot) {
 
@@ -236,6 +236,18 @@ exports.startDialog = function (bot) {
         // Insert logic here later
     ]).triggerAction({
         matches: 'WelcomeIntent'
+    });
+
+    bot.dialog('QnA', [
+        function (session, args, next) {
+            session.dialogData.args = args || {};
+            builder.Prompts.text(session, "What is your question?");
+        },
+        function (session, results, next) {
+            qna.talkToQnA(session, results.response);
+        }
+    ]).triggerAction({
+        matches: 'QnA'
     });
 }
 
